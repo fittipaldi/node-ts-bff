@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package demo;
+
+service DemoService {
+    rpc CreateDemo (DemoRequest) returns (DemoResponse);
+    rpc GetDemos (Empty) returns (DemosResponse);
+}
+
+message DemoRequest {
+    string name = 1;
+    string email = 2;
+}
+
+message DemoResponse {
+    string uuid = 1;
+    string name = 2;
+    string email = 3;
+    string message = 4;
+}
+
+message Empty {}
+
+message DemosResponse {
+    repeated DemoResponse demos = 1;
+}
+

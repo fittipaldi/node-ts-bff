@@ -1,0 +1,35 @@
+name: Deploy Swagger Docs to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '23' # Specify your desired Node.js version
+
+      - name: Install dependencies
+        run: make install
+
+      - name: Build Swagger documentation
+        run: make make_doc
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs  # Path to your Swagger docs folder
+          publish_branch: gh-pages  # The branch to deploy to
