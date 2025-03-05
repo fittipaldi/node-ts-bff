@@ -1,0 +1,115 @@
+openapi: 3.0.0
+info:
+  title: BFF using the demo gRPC service API
+  description: BFF API Swagger UI documentation
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/v1
+paths:
+  /demo/add:
+    post:
+      summary: Add a Demo
+      description: Create a Demo record
+      operationId: addDemo
+      requestBody:
+        description: JSON object containing email and name to be added.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: The email address of the user
+                name:
+                  type: string
+                  description: The full name of the user
+              required:
+                - email
+                - name
+      responses:
+        '200':
+          $ref: '#/components/responses/DemoResponse'
+        '400':
+          $ref: '#/components/responses/400Response'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+
+  /demos:
+    get:
+      summary: Get Demos list
+      description: Get list of Demos record
+      operationId: listDemos
+      responses:
+        '200':
+          $ref: '#/components/responses/DemosResponse'
+        '400':
+          $ref: '#/components/responses/400Response'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+
+components:
+  responses:
+
+    InternalServerErrorResponse:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Internal Server Error"
+
+    400Response:
+      description: An Error Happened
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "An Error Happened!"
+
+    DemoResponse:
+      description: A Demo object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              uuid:
+                type: string
+                example: "d893ab14-f583-4940-aece-06a82319c2b7"
+              name:
+                type: string
+                example: "Karl Marx"
+              email:
+                type: string
+                example: "email@email.com"
+              message:
+                type: string
+                example: "Demo created successfully!"
+
+    DemosResponse:
+      description: A list of Demo objects
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              demos:
+                type: array
+                items:
+                  $ref: '#/components/responses/DemoResponse'
+          example:
+            demos:
+              - uuid: "d893ab14-f583-4940-aece-06a82319c2b7"
+                name: "Karl Marx"
+                email: "email@email.com"
+                message: "Demo created successfully!"
+
+
